@@ -1056,6 +1056,7 @@ name = "moq-pub"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "bytes",
  "clap",
  "clap_mangen",
  "env_logger",
@@ -1100,6 +1101,55 @@ dependencies = [
  "tracing-subscriber",
  "url",
  "webpki",
+ "webtransport-quinn",
+]
+
+[[package]]
+name = "moq-telemetry-pub"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytes",
+ "clap",
+ "clap_mangen",
+ "env_logger",
+ "log",
+ "moq-transport",
+ "mp4",
+ "quinn",
+ "rfc6381-codec",
+ "rustls",
+ "rustls-native-certs",
+ "rustls-pemfile",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "url",
+ "webtransport-quinn",
+]
+
+[[package]]
+name = "moq-telemetry-sub"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "clap_mangen",
+ "env_logger",
+ "log",
+ "moq-transport",
+ "mp4",
+ "quinn",
+ "rfc6381-codec",
+ "rustls",
+ "rustls-native-certs",
+ "rustls-pemfile",
+ "serde_json",
+ "tokio",
+ "tracing",
+ "tracing-subscriber",
+ "url",
  "webtransport-quinn",
 ]
 

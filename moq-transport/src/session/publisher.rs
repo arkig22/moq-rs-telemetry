@@ -183,7 +183,9 @@ impl Publisher {
 			expires: segment.expires,
 		};
 
-		log::trace!("serving object: {:?}", object);
+		//log::trace!("serving object: {:?}", object);
+		log::debug!("serving object: {:?}", object);
+
 
 		let mut stream = self.webtransport.open_uni().await?;
 		stream.set_priority(object.priority).ok();
