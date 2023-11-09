@@ -56,7 +56,7 @@ impl Media {
 			//log::debug!("segment: {:?}", segment);
 
 			//wait one second
-    		thread::sleep(Duration::from_millis(1000));
+    		tokio::time::sleep(Duration::from_millis(1000)).await;
 		}
 	}
 }
