@@ -13,6 +13,9 @@ use crate::{
 	VarInt,
 };
 
+use std::time::{SystemTime, UNIX_EPOCH};
+
+
 /// Receives broadcasts over the network, automatically handling subscriptions and caching.
 // TODO Clone specific fields when a task actually needs it.
 #[derive(Clone, Debug)]
@@ -107,12 +110,20 @@ impl Subscriber {
 
 	async fn run_stream(self, mut stream: RecvStream) -> Result<(), SessionError> {
 		// Decode the object on the data stream.
-		let object = message::Object::decode(&mut stream)
+		let mut object = message::Object::decode(&mut stream)
 			.await
 			.map_err(|e| SessionError::Unknown(e.to_string()))?;
 
 		//log::trace!("received object: {:?}", object);
-		log::debug!("received object: {:?}", object);
+		//log::debug!("received object: {:?}", object);
+
+		let now = SystemTime::now();
+		let since_the_epoch = now.duration_since(UNIX_EPOCH).expect("Time went backwards");
+		let millisec = (since_the_epoch.as_millis() % 1_000_000_0) as i32;
+		//let mut timestamps = Vec::new();
+		//timestamps.push(millisec);
+		object.priority.push(millisec);
+		object.hops += 1;
 
 		// A new scope is needed because the async compiler is dumb
 		let mut publisher = {
@@ -121,6 +132,7 @@ impl Subscriber {
 
 			track.create_segment(segment::Info {
 				sequence: object.sequence,
+				hops: object.hops,
 				priority: object.priority,
 				expires: object.expires,
 			})?

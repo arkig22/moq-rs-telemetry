@@ -14,11 +14,11 @@ KEY="${KEY:-dev/localhost.key}"
 
 # Default to listening on localhost:4443
 HOST="${HOST:-[::]}"
-PORT="${PORT:-4443}"
+PORT="${PORT:-4444}"
 LISTEN="${LISTEN:-$HOST:$PORT}"
 
 # A list of optional args
-ARGS=""
+ARGS="${ARGS:-}"
 
 # Connect to the given URL to get origins.
 # TODO default to a public instance?

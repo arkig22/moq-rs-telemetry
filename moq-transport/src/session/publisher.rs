@@ -179,16 +179,20 @@ impl Publisher {
 		let object = message::Object {
 			track: id,
 			sequence: segment.sequence,
-			priority: segment.priority,
+			hops: segment.hops,
+			priority: segment.priority.clone(),
 			expires: segment.expires,
 		};
 
 		//log::trace!("serving object: {:?}", object);
-		log::debug!("serving object: {:?}", object);
+		//log::debug!("serving object: {:?}", object);
 
 
 		let mut stream = self.webtransport.open_uni().await?;
-		stream.set_priority(object.priority).ok();
+		//stream.set_priority(object.priority).ok();
+		let &priority = object.priority.last().unwrap();
+		stream.set_priority(priority).ok();
+
 
 		object
 			.encode(&mut stream)

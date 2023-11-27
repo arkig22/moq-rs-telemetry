@@ -8,8 +8,10 @@ cd "$(dirname "$0")/.."
 export RUST_LOG="${RUST_LOG:-debug}"
 
 # Connect to localhost by default.
-HOST="${HOST:-localhost}"
-PORT="${PORT:-4443}"
+#HOST="${HOST:-10.103.15.11}"
+#PORT="${PORT:-4444}"
+HOST="${HOST:-34.107.8.7}"
+PORT="${PORT:-4444}"
 ADDR="${ADDR:-$HOST:$PORT}"
 
 # Generate a random 16 character name by default.

@@ -33,8 +33,11 @@ pub struct Info {
 	// The sequence number of the segment within the track.
 	pub sequence: VarInt,
 
+	pub hops: i8,
+
 	// The priority of the segment within the BROADCAST.
-	pub priority: i32,
+	//pub priority: i32,
+	pub priority: Vec<i32>,
 
 	// Cache the segment for at most this long.
 	pub expires: Option<time::Duration>,

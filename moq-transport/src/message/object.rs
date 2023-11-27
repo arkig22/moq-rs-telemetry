@@ -15,9 +15,13 @@ pub struct Object {
 	// The sequence number within the track.
 	pub sequence: VarInt,
 
+	pub hops: i8,
+
 	// The priority, where **larger** values are sent first.
 	// Proposal: int32 instead of a varint.
-	pub priority: i32,
+	pub priority: Vec<i32>,
+	//pub priority: i32,
+
 
 	// Cache the object for at most this many seconds.
 	// Zero means never expire.
@@ -35,7 +39,14 @@ impl Object {
 
 		let track = VarInt::decode(r).await?;
 		let sequence = VarInt::decode(r).await?;
-		let priority = r.read_i32().await?; // big-endian
+		//let hops = VarInt::decode(r).await?;
+		let hops = r.read_i8().await?;
+		//let priority = r.read_i32().await?; // big-endian
+		let mut priority = Vec::new();
+		for _ in 0..hops {
+			priority.push(r.read_i32().await?);
+		}
+
 		let expires = match VarInt::decode(r).await?.into_inner() {
 			0 => None,
 			secs => Some(time::Duration::from_secs(secs)),
@@ -44,6 +55,7 @@ impl Object {
 		Ok(Self {
 			track,
 			sequence,
+			hops,
 			priority,
 			expires,
 		})
@@ -53,7 +65,12 @@ impl Object {
 		VarInt::ZERO.encode(w).await?;
 		self.track.encode(w).await?;
 		self.sequence.encode(w).await?;
-		w.write_i32(self.priority).await?;
+		//self.hops.encode(w).await?;
+		w.write_i8(self.hops).await?;
+		//w.write_i32(self.priority).await?;
+		for &i in &self.priority {
+			w.write_i32(i).await?;
+		}
 
 		// Round up if there's any decimal points.
 		let expires = match self.expires {
